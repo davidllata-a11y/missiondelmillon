@@ -43,7 +43,7 @@ loader.load("models/piernas.glb", function (gltf) {
   model.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
   // Ajustar cámara automáticamente
-  camera.position.set(0, 0, size * 0.8);
+  camera.position.set(0, 0, size * 1.5);
   camera.lookAt(0, 0, 0);
 });
 
