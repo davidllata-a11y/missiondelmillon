@@ -15,15 +15,15 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(0, 1, 8); // Cámara alejada para ver el modelo entero
+camera.position.set(0, 2, 12); // Cámara más lejos
 camera.lookAt(0, 0, 0);
 
-// Luz fuerte
+// Luz direccional fuerte
 const light = new THREE.DirectionalLight(0xffffff, 2);
-light.position.set(5, 5, 5);
+light.position.set(5, 10, 10);
 scene.add(light);
 
-// Luz ambiental
+// Luz ambiental suave
 const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
 scene.add(hemi);
 
@@ -43,8 +43,8 @@ loader.load(
     // Colocar el modelo en el centro
     model.position.set(0, 0, 0);
 
-    // Escala razonable (ni gigante ni minúsculo)
-    model.scale.set(2, 2, 2);
+    // Escala más pequeña para que se vea entero
+    model.scale.set(0.8, 0.8, 0.8);
 
     // Rotación inicial
     model.rotation.y = Math.PI;
@@ -59,9 +59,9 @@ loader.load(
 function animate() {
   requestAnimationFrame(animate);
 
-  // Si el modelo existe, lo rotamos
+  // Rotación visible
   if (model) {
-    model.rotation.y += 0.01; // Rotación suave
+    model.rotation.y += 0.01;
   }
 
   renderer.render(scene, camera);
