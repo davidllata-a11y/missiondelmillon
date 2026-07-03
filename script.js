@@ -13,14 +13,14 @@ const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
-  1000
+  5000
 );
-camera.position.set(0, 2, 12); // Cámara más lejos
+camera.position.set(0, 2, 25); // Cámara MUY lejos
 camera.lookAt(0, 0, 0);
 
 // Luz direccional fuerte
 const light = new THREE.DirectionalLight(0xffffff, 2);
-light.position.set(5, 10, 10);
+light.position.set(10, 20, 20);
 scene.add(light);
 
 // Luz ambiental suave
@@ -43,8 +43,8 @@ loader.load(
     // Colocar el modelo en el centro
     model.position.set(0, 0, 0);
 
-    // Escala más pequeña para que se vea entero
-    model.scale.set(0.8, 0.8, 0.8);
+    // Escala MUY pequeña (porque tu modelo es gigante)
+    model.scale.set(0.05, 0.05, 0.05);
 
     // Rotación inicial
     model.rotation.y = Math.PI;
