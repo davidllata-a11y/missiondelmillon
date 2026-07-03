@@ -33,15 +33,22 @@ loader.load(
     // Obtener caja del modelo
     const box = new THREE.Box3().setFromObject(model);
     const center = box.getCenter(new THREE.Vector3());
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
 
     // Centrar modelo
     model.position.set(-center.x, -center.y, -center.z);
 
-    // Escala fija grande
-    model.scale.set(10, 10, 10);
+    // Escala segura (ni demasiado grande ni demasiado pequeña)
+    const scaleFactor = 1 / maxDim; 
+    model.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-    // Cámara cerca
-    camera.position.set(0, 0, 5);
+    // Cámara a distancia segura
+    camera.position.set(0, 0, 3);
+    camera.far = 1000;
+    camera.updateProjectionMatrix();
+
+    // Apuntar la cámara al centro
     camera.lookAt(0, 0, 0);
   },
   undefined,
