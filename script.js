@@ -26,18 +26,23 @@ loader.load("models/piernas.glb", function (gltf) {
   const model = gltf.scene;
   scene.add(model);
 
-  // AUTO AJUSTE
+  // AUTO AJUSTE CORREGIDO
   const box = new THREE.Box3().setFromObject(model);
   const size = box.getSize(new THREE.Vector3()).length();
   const center = box.getCenter(new THREE.Vector3());
 
-  model.position.x += (model.position.x - center.x);
-  model.position.y += (model.position.y - center.y);
-  model.position.z += (model.position.z - center.z);
+  // Centrar modelo correctamente
+  model.position.set(
+    model.position.x - center.x,
+    model.position.y - center.y,
+    model.position.z - center.z
+  );
 
+  // Escalar automáticamente
   const scaleFactor = 2 / size;
   model.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
+  // Ajustar cámara automáticamente
   camera.position.set(0, 0, size * 0.8);
   camera.lookAt(0, 0, 0);
 });
