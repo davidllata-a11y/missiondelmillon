@@ -13,14 +13,21 @@ const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
-  5000
+  1000
 );
-camera.position.set(0, 0, 10);
+camera.position.set(0, 1, 5); // Cámara en posición segura
+camera.lookAt(0, 0, 0);
 
-// Luz
-const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
+// Luz fuerte
+const light = new THREE.DirectionalLight(0xffffff, 2);
+light.position.set(5, 5, 5);
 scene.add(light);
 
+// Luz ambiental
+const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
+scene.add(hemi);
+
+// Cargar modelo
 const loader = new THREE.GLTFLoader();
 loader.load(
   "models/piernas.glb",
@@ -30,33 +37,20 @@ loader.load(
     const model = gltf.scene;
     scene.add(model);
 
-    // Obtener caja del modelo
-    const box = new THREE.Box3().setFromObject(model);
-    const center = box.getCenter(new THREE.Vector3());
-    const size = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
+    // Colocar el modelo en el centro
+    model.position.set(0, 0, 0);
 
-    // Centrar modelo
-    model.position.set(-center.x, -center.y, -center.z);
+    // Escala fija para que se vea sí o sí
+    model.scale.set(1, 1, 1);
 
-    // Escala segura (ni demasiado grande ni demasiado pequeña)
-    const scaleFactor = 1 / maxDim; 
-    model.scale.set(scaleFactor, scaleFactor, scaleFactor);
-
-    // Cámara a distancia segura
-    camera.position.set(0, 0, 3);
-    camera.far = 1000;
-    camera.updateProjectionMatrix();
-
-    // Apuntar la cámara al centro
-    camera.lookAt(0, 0, 0);
+    // Rotación para que no quede de espaldas
+    model.rotation.y = Math.PI;
   },
   undefined,
   function (error) {
     console.error("ERROR LOADING MODEL:", error);
   }
 );
-
 
 // Animación
 function animate() {
