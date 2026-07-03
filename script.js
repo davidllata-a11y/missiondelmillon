@@ -19,7 +19,7 @@ scene.add(light);
 const loader = new THREE.GLTFLoader();
 loader.load("models/piernas.glb", function (gltf) {
   const model = gltf.scene;
-  model.scale.set(1, 1, 1);
+  model.scale.set(0.1, 0.1, 0.1);
   scene.add(model);
 });
 
