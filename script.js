@@ -11,7 +11,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.set(0, 1.5, 3);
+camera.position.set(0, 2, 6);
 
 const light = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
 scene.add(light);
@@ -20,6 +20,8 @@ const loader = new THREE.GLTFLoader();
 loader.load("models/piernas.glb", function (gltf) {
   const model = gltf.scene;
   model.scale.set(0.1, 0.1, 0.1);
+  model.position.set(0, 0, 0);
+model.rotation.set(0, 0, 0);
   scene.add(model);
 });
 
