@@ -8,14 +8,14 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111111);
 
-// Cámara (más cerca para que se vea grande al iniciar)
+// Cámara (ajustada para que se vea del tamaño ideal)
 const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
   5000
 );
-camera.position.set(0, 2, 10); // <-- ANTES 30, AHORA 10 (MUCHO MÁS CERCA)
+camera.position.set(0, 2, 15); // <-- ANTES 10, AHORA 15 (tu tamaño ideal)
 
 // Controles (ratón + táctil)
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -51,12 +51,11 @@ loader.load(
 
     model.position.set(0, 0, 0);
 
-    // Escala más grande para que se vea bien al abrir
-    model.scale.set(0.05, 0.05, 0.05); // <-- ANTES 0.02, AHORA 0.05
+    // Escala ideal
+    model.scale.set(0.05, 0.05, 0.05);
 
     model.rotation.y = Math.PI;
 
-    // Asegurar que la cámara mire al modelo
     controls.target.copy(model.position);
     controls.update();
   },
@@ -72,7 +71,7 @@ document.getElementById("rotateBtn").onclick = () => {
 };
 
 document.getElementById("zoomInBtn").onclick = () => {
-  camera.position.z -= 1; // Zoom más suave
+  camera.position.z -= 1;
   controls.update();
 };
 
@@ -82,7 +81,7 @@ document.getElementById("zoomOutBtn").onclick = () => {
 };
 
 document.getElementById("resetBtn").onclick = () => {
-  camera.position.set(0, 2, 10); // Vista inicial grande
+  camera.position.set(0, 2, 15); // <-- Vista inicial ideal
   controls.target.set(0, 0, 0);
   controls.update();
 };
