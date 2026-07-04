@@ -47,7 +47,7 @@ const loader = new THREE.GLTFLoader();
 loader.load(
   "models/piernas.glb",
   function (gltf) {
-    console.log("MODEL LOADED OK");
+    console.log("✔ MODELO CARGADO");
 
     model = gltf.scene;
     scene.add(model);
@@ -56,7 +56,6 @@ loader.load(
     model.scale.set(0.05, 0.05, 0.05);
     model.rotation.y = Math.PI;
 
-    // Mostrar nombres de las partes del modelo
     model.traverse((obj) => {
       if (obj.isMesh) {
         console.log("MESH:", obj.name);
@@ -68,9 +67,10 @@ loader.load(
   },
   undefined,
   function (error) {
-    console.error("ERROR LOADING MODEL:", error);
+    console.error("❌ ERROR: No se pudo cargar models/piernas.glb");
   }
 );
+
 
 // BOTONES
 document.getElementById("rotateBtn").onclick = () => {
