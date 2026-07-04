@@ -8,14 +8,14 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x111111);
 
-// Cámara
+// Cámara (más cerca para que se vea grande al iniciar)
 const camera = new THREE.PerspectiveCamera(
   45,
   window.innerWidth / window.innerHeight,
   0.1,
   5000
 );
-camera.position.set(0, 2, 30);
+camera.position.set(0, 2, 10); // <-- ANTES 30, AHORA 10 (MUCHO MÁS CERCA)
 
 // Controles (ratón + táctil)
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -23,7 +23,7 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 controls.enableZoom = true;
 controls.enablePan = false;
-controls.target.set(0, 0, 0); // MUY IMPORTANTE
+controls.target.set(0, 0, 0);
 controls.update();
 
 // Luz direccional fuerte
@@ -50,7 +50,10 @@ loader.load(
     scene.add(model);
 
     model.position.set(0, 0, 0);
-    model.scale.set(0.02, 0.02, 0.02);
+
+    // Escala más grande para que se vea bien al abrir
+    model.scale.set(0.05, 0.05, 0.05); // <-- ANTES 0.02, AHORA 0.05
+
     model.rotation.y = Math.PI;
 
     // Asegurar que la cámara mire al modelo
@@ -69,17 +72,17 @@ document.getElementById("rotateBtn").onclick = () => {
 };
 
 document.getElementById("zoomInBtn").onclick = () => {
-  camera.position.z -= 2;
+  camera.position.z -= 1; // Zoom más suave
   controls.update();
 };
 
 document.getElementById("zoomOutBtn").onclick = () => {
-  camera.position.z += 2;
+  camera.position.z += 1;
   controls.update();
 };
 
 document.getElementById("resetBtn").onclick = () => {
-  camera.position.set(0, 2, 30);
+  camera.position.set(0, 2, 10); // Vista inicial grande
   controls.target.set(0, 0, 0);
   controls.update();
 };
