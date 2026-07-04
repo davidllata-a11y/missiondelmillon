@@ -15,8 +15,15 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   5000
 );
-camera.position.set(0, 2, 25); // Cámara MUY lejos
+camera.position.set(0, 2, 30);
 camera.lookAt(0, 0, 0);
+
+// Controles (ratón + táctil)
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.enableZoom = true;
+controls.enablePan = false;
 
 // Luz direccional fuerte
 const light = new THREE.DirectionalLight(0xffffff, 2);
@@ -29,6 +36,7 @@ scene.add(hemi);
 
 // Variable para el modelo
 let model;
+let autoRotate = true;
 
 // Cargar modelo
 const loader = new THREE.GLTFLoader();
@@ -40,13 +48,8 @@ loader.load(
     model = gltf.scene;
     scene.add(model);
 
-    // Colocar el modelo en el centro
     model.position.set(0, 0, 0);
-
-    // Escala MUY pequeña (porque tu modelo es gigante)
-    model.scale.set(0.05, 0.05, 0.05);
-
-    // Rotación inicial
+    model.scale.set(0.02, 0.02, 0.02);
     model.rotation.y = Math.PI;
   },
   undefined,
@@ -55,15 +58,33 @@ loader.load(
   }
 );
 
+// BOTONES
+document.getElementById("rotateBtn").onclick = () => {
+  autoRotate = !autoRotate;
+};
+
+document.getElementById("zoomInBtn").onclick = () => {
+  camera.position.z -= 2;
+};
+
+document.getElementById("zoomOutBtn").onclick = () => {
+  camera.position.z += 2;
+};
+
+document.getElementById("resetBtn").onclick = () => {
+  camera.position.set(0, 2, 30);
+  controls.update();
+};
+
 // Animación
 function animate() {
   requestAnimationFrame(animate);
 
-  // Rotación visible
-  if (model) {
+  if (model && autoRotate) {
     model.rotation.y += 0.01;
   }
 
+  controls.update();
   renderer.render(scene, camera);
 }
 animate();
