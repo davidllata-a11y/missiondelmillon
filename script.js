@@ -50,6 +50,12 @@ loader.load(
     scene.add(model);
 
     model.position.set(0, 0, 0);
+    model.traverse((obj) => {
+  if (obj.isMesh) {
+    console.log("MESH:", obj.name);
+  }
+});
+
 
     // Escala ideal
     model.scale.set(0.05, 0.05, 0.05);
