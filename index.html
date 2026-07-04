@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/examples/js/controls/OrbitControls.js"></script>
+
   <meta charset="UTF-8">
   <title>Misión del Millón</title>
 
@@ -10,8 +12,14 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="ui" style="position:fixed; top:20px; left:20px; z-index:10;">
+  <button id="rotateBtn">Rotar ON/OFF</button>
+  <button id="zoomInBtn">Zoom +</button>
+  <button id="zoomOutBtn">Zoom -</button>
+  <button id="resetBtn">Reset</button>
+</div>
+
   <canvas id="canvas3d"></canvas>
   <script src="script.js"></script>
 </body>
 </html>
-<script src="https://cdn.jsdelivr.net/npm/three@0.150.1/examples/js/controls/OrbitControls.js"></script>
