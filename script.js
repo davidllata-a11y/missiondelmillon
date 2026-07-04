@@ -16,7 +16,6 @@ const camera = new THREE.PerspectiveCamera(
   5000
 );
 camera.position.set(0, 2, 30);
-camera.lookAt(0, 0, 0);
 
 // Controles (ratón + táctil)
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -24,6 +23,8 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 controls.enableZoom = true;
 controls.enablePan = false;
+controls.target.set(0, 0, 0); // MUY IMPORTANTE
+controls.update();
 
 // Luz direccional fuerte
 const light = new THREE.DirectionalLight(0xffffff, 2);
@@ -51,6 +52,10 @@ loader.load(
     model.position.set(0, 0, 0);
     model.scale.set(0.02, 0.02, 0.02);
     model.rotation.y = Math.PI;
+
+    // Asegurar que la cámara mire al modelo
+    controls.target.copy(model.position);
+    controls.update();
   },
   undefined,
   function (error) {
@@ -65,14 +70,17 @@ document.getElementById("rotateBtn").onclick = () => {
 
 document.getElementById("zoomInBtn").onclick = () => {
   camera.position.z -= 2;
+  controls.update();
 };
 
 document.getElementById("zoomOutBtn").onclick = () => {
   camera.position.z += 2;
+  controls.update();
 };
 
 document.getElementById("resetBtn").onclick = () => {
   camera.position.set(0, 2, 30);
+  controls.target.set(0, 0, 0);
   controls.update();
 };
 
