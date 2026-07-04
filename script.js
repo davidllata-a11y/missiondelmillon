@@ -56,6 +56,7 @@ loader.load(
     model.scale.set(0.05, 0.05, 0.05);
     model.rotation.y = Math.PI;
 
+    // Mostrar nombres de las partes del modelo
     model.traverse((obj) => {
       if (obj.isMesh) {
         console.log("MESH:", obj.name);
@@ -70,7 +71,6 @@ loader.load(
     console.error("❌ ERROR: No se pudo cargar models/piernas.glb");
   }
 );
-
 
 // BOTONES
 document.getElementById("rotateBtn").onclick = () => {
