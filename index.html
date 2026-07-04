@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <title>Misión del Millón</title>
 
-  <!-- THREE.JS -->
+  <!-- THREE.JS (versión estable y compatible con OrbitControls y GLTFLoader) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-  <!-- GLTF LOADER -->
+  <!-- GLTF LOADER (misma versión que Three.js) -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/loaders/GLTFLoader.js"></script>
 
-  <!-- ORBIT CONTROLS (ratón + móvil) -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/examples/js/controls/OrbitControls.js"></script>
+  <!-- ORBIT CONTROLS (compatible con r128) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -27,7 +27,7 @@
   </div>
 
   <!-- CANVAS -->
-  <canvas id="canvas3d"></canvas>
+  <canvas id="canvas3d" style="width:100vw; height:100vh; display:block;"></canvas>
 
   <!-- SCRIPT PRINCIPAL -->
   <script src="script.js"></script>
