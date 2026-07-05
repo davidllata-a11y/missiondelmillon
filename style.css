@@ -1,11 +1,51 @@
-body {
-  margin: 0;
-  overflow: hidden;
-  background: #111;
+#mapa {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
 }
 
-#canvas3d {
-  width: 100vw;
-  height: 100vh;
-  display: block;
+.pierna {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fila {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+}
+
+.celda {
+  width: 20px;
+  height: 20px;
+  background: #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: 0.2s;
+  position: relative;
+}
+
+.celda:hover {
+  background: #aaa;
+}
+
+/* Estados */
+.celda.disponible { background: #ccc; }
+.celda.seleccionada { background: #00ff00; }
+.celda.reservada { background: #ffcc00; }
+.celda.vendida { background: #ff0000; }
+
+/* Tooltip */
+#tooltip {
+  position: fixed;
+  background: #222;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
 }
