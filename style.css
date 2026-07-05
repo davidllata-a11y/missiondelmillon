@@ -49,3 +49,22 @@
   opacity: 0;
   transition: opacity 0.2s;
 }
+#controles {
+  margin-top: 30px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+#controles button {
+  padding: 10px 15px;
+  border: none;
+  background: #444;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#controles button:hover {
+  background: #666;
+}
