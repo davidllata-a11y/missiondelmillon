@@ -1,152 +1,71 @@
-// Crear renderer
-const canvas = document.getElementById("canvas3d");
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
+// CONFIGURACIÓN REAL DE TUS PIERNAS
+const zonas = [
+  { nombre: "muslo_alto", filas: 10, columnas: 21, circ: 63.5 },
+  { nombre: "muslo_medio_alto", filas: 10, columnas: 19, circ: 56.5 },
+  { nombre: "muslo_medio_bajo", filas: 10, columnas: 16, circ: 48 },
+  { nombre: "antes_rodilla", filas: 5, columnas: 14, circ: 40.5 },
+  { nombre: "rodilla", filas: 5, columnas: 13, circ: 39.5 },
+  { nombre: "debajo_rodilla", filas: 10, columnas: 12, circ: 35.5 },
+  { nombre: "pantorrilla", filas: 12, columnas: 13, circ: 38 },
+  { nombre: "pantorrilla_baja", filas: 12, columnas: 10, circ: 29 },
+  { nombre: "tobillo", filas: 10, columnas: 8, circ: 23 }
+];
 
-// Crear escena
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x111111);
+const tooltip = document.getElementById("tooltip");
 
-// Cámara
-const camera = new THREE.PerspectiveCamera(
-  45,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  5000
-);
-camera.position.set(0, 2, 15);
+// GENERAR UNA PIERNA
+function generarPierna(idPierna) {
+  const contenedor = document.getElementById(idPierna);
 
-// Controles
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.05;
-controls.enableZoom = true;
-controls.enablePan = false;
-controls.target.set(0, 0, 0);
-controls.update();
+  zonas.forEach(z => {
+    for (let f = 0; f < z.filas; f++) {
+      const fila = document.createElement("div");
+      fila.classList.add("fila");
 
-// Luces
-const light = new THREE.DirectionalLight(0xffffff, 2);
-light.position.set(10, 20, 20);
-scene.add(light);
+      for (let c = 0; c < z.columnas; c++) {
+        const celda = document.createElement("div");
+        celda.classList.add("celda", "disponible");
 
-const hemi = new THREE.HemisphereLight(0xffffff, 0x444444, 1);
-scene.add(hemi);
+        // ID único
+        celda.dataset.id = `${idPierna}-${z.nombre}-f${f}-c${c}`;
+        celda.dataset.zona = z.nombre;
+        celda.dataset.fila = f;
+        celda.dataset.columna = c;
+        celda.dataset.circ = z.circ;
 
-// Variables
-let model;
-let autoRotate = true;
-let modoParcelas = false;
+        // CLICK → seleccionar
+        celda.onclick = () => {
+          celda.classList.toggle("seleccionada");
+        };
 
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
+        // TOOLTIP
+        celda.onmousemove = (e) => {
+          tooltip.style.opacity = 1;
+          tooltip.style.left = (e.pageX + 15) + "px";
+          tooltip.style.top = (e.pageY + 15) + "px";
 
-// Cargar modelo
-const loader = new THREE.GLTFLoader();
-loader.load(
-  "models/piernas.glb",
-  function (gltf) {
-    console.log("✔ MODELO CARGADO");
+          tooltip.innerHTML = `
+            <b>Parcela:</b> ${celda.dataset.id}<br>
+            <b>Zona:</b> ${celda.dataset.zona}<br>
+            <b>Fila:</b> ${celda.dataset.fila}<br>
+            <b>Columna:</b> ${celda.dataset.columna}<br>
+            <b>Circunferencia real:</b> ${celda.dataset.circ} cm<br>
+            <b>Estado:</b> ${celda.classList.contains("seleccionada") ? "Seleccionada" : "Disponible"}
+          `;
+        };
 
-    model = gltf.scene;
-    scene.add(model);
+        celda.onmouseleave = () => {
+          tooltip.style.opacity = 0;
+        };
 
-    model.position.set(0, 0, 0);
-    model.scale.set(0.05, 0.05, 0.05);
-    model.rotation.y = Math.PI;
-
-    // Mostrar nombres de las partes del modelo
-    model.traverse((obj) => {
-      if (obj.isMesh) {
-        console.log("MESH:", obj.name);
+        fila.appendChild(celda);
       }
-    });
 
-    controls.target.copy(model.position);
-    controls.update();
-  },
-  undefined,
-  function (error) {
-    console.error("❌ ERROR: No se pudo cargar models/piernas.glb");
-  }
-);
-
-// BOTONES
-document.getElementById("rotateBtn").onclick = () => {
-  autoRotate = !autoRotate;
-};
-
-document.getElementById("zoomInBtn").onclick = () => {
-  camera.position.z -= 1;
-  controls.update();
-};
-
-document.getElementById("zoomOutBtn").onclick = () => {
-  camera.position.z += 1;
-  controls.update();
-};
-
-document.getElementById("resetBtn").onclick = () => {
-  camera.position.set(0, 2, 15);
-  controls.target.set(0, 0, 0);
-  controls.update();
-};
-
-// MODO PARCELAS
-document.getElementById("parcelasBtn").onclick = () => {
-  modoParcelas = !modoParcelas;
-
-  if (modoParcelas) {
-    alert("Modo Parcelas ACTIVADO.\nHaz clic en la pierna para crear una parcela.");
-  } else {
-    alert("Modo Parcelas DESACTIVADO.");
-  }
-};
-
-// CLICK PARA CREAR PARCELA
-window.addEventListener("click", (event) => {
-  if (!modoParcelas) return;
-
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera);
-
-  const intersecciones = raycaster.intersectObject(model, true);
-
-  if (intersecciones.length > 0) {
-    const punto = intersecciones[0].point;
-
-    // MOSTRAR Y EN CONSOLA
-    console.log("Y:", punto.y);
-
-    // Crear marcador verde
-    const geometry = new THREE.SphereGeometry(0.2, 16, 16);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const marcador = new THREE.Mesh(geometry, material);
-
-    marcador.position.copy(punto);
-    scene.add(marcador);
-
-    alert(
-      "Parcela creada:\n" +
-      "x: " + punto.x.toFixed(3) + "\n" +
-      "y: " + punto.y.toFixed(3) + "\n" +
-      "z: " + punto.z.toFixed(3)
-    );
-  }
-});
-
-// Animación
-function animate() {
-  requestAnimationFrame(animate);
-
-  if (model && autoRotate) {
-    model.rotation.y += 0.01;
-  }
-
-  controls.update();
-  renderer.render(scene, camera);
+      contenedor.appendChild(fila);
+    }
+  });
 }
-animate();
+
+// GENERAR LAS DOS PIERNAS
+generarPierna("pierna-izquierda");
+generarPierna("pierna-derecha");
