@@ -69,3 +69,102 @@ function generarPierna(idPierna) {
 // GENERAR LAS DOS PIERNAS
 generarPierna("pierna-izquierda");
 generarPierna("pierna-derecha");
+// ===============================
+// SISTEMA DE ESTADOS
+// ===============================
+
+function cambiarEstadoSeleccionados(nuevoEstado) {
+  document.querySelectorAll(".celda.seleccionada").forEach(celda => {
+    celda.classList.remove("disponible", "reservada", "vendida", "seleccionada");
+    celda.classList.add(nuevoEstado);
+  });
+}
+
+// ===============================
+// GUARDAR ESTADO EN localStorage
+// ===============================
+
+function guardarEstado() {
+  const estado = {};
+
+  document.querySelectorAll(".celda").forEach(celda => {
+    if (celda.classList.contains("vendida")) estado[celda.dataset.id] = "vendida";
+    else if (celda.classList.contains("reservada")) estado[celda.dataset.id] = "reservada";
+    else if (celda.classList.contains("seleccionada")) estado[celda.dataset.id] = "seleccionada";
+    else estado[celda.dataset.id] = "disponible";
+  });
+
+  localStorage.setItem("estadoPiernas", JSON.stringify(estado));
+  alert("Estado guardado");
+}
+
+// ===============================
+// CARGAR ESTADO DESDE localStorage
+// ===============================
+
+function cargarEstado() {
+  const estado = JSON.parse(localStorage.getItem("estadoPiernas"));
+  if (!estado) return alert("No hay estado guardado");
+
+  document.querySelectorAll(".celda").forEach(celda => {
+    celda.classList.remove("disponible", "reservada", "vendida", "seleccionada");
+    celda.classList.add(estado[celda.dataset.id]);
+  });
+
+  alert("Estado cargado");
+}
+
+// ===============================
+// EXPORTAR JSON
+// ===============================
+
+function exportarJSON() {
+  const estado = JSON.parse(localStorage.getItem("estadoPiernas"));
+  if (!estado) return alert("No hay estado guardado");
+
+  const blob = new Blob([JSON.stringify(estado, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "estadoPiernas.json";
+  a.click();
+}
+
+// ===============================
+// IMPORTAR JSON
+// ===============================
+
+document.getElementById("btn-importar").onclick = () => {
+  document.getElementById("input-importar").click();
+};
+
+document.getElementById("input-importar").onchange = function () {
+  const file = this.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function () {
+    const estado = JSON.parse(reader.result);
+
+    document.querySelectorAll(".celda").forEach(celda => {
+      celda.classList.remove("disponible", "reservada", "vendida", "seleccionada");
+      celda.classList.add(estado[celda.dataset.id]);
+    });
+
+    localStorage.setItem("estadoPiernas", JSON.stringify(estado));
+    alert("Estado importado");
+  };
+
+  reader.readAsText(file);
+};
+
+// ===============================
+// BOTONES
+// ===============================
+
+document.getElementById("btn-liberar").onclick = () => cambiarEstadoSeleccionados("disponible");
+document.getElementById("btn-reservar").onclick = () => cambiarEstadoSeleccionados("reservada");
+document.getElementById("btn-vender").onclick = () => cambiarEstadoSeleccionados("vendida");
+document.getElementById("btn-guardar").onclick = guardarEstado;
+document.getElementById("btn-cargar").onclick = cargarEstado;
+document.getElementById("btn-exportar").onclick = exportarJSON;
