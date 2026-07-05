@@ -1,37 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Misión del Millón</title>
+<div id="mapa">
+  <div class="pierna" id="pierna-izquierda"></div>
+  <div class="pierna" id="pierna-derecha"></div>
+</div>
 
-  <!-- THREE.JS (versión estable y compatible con OrbitControls y GLTFLoader) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-  <!-- GLTF LOADER (misma versión que Three.js) -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/loaders/GLTFLoader.js"></script>
-
-  <!-- ORBIT CONTROLS (compatible con r128) -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128/examples/js/controls/OrbitControls.js"></script>
-
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-  <!-- BOTONES -->
-  <div id="ui" style="position:fixed; top:20px; left:20px; z-index:10;">
-    <button id="rotateBtn">Rotar ON/OFF</button>
-    <button id="zoomInBtn">Zoom +</button>
-    <button id="zoomOutBtn">Zoom -</button>
-    <button id="resetBtn">Reset</button>
-    <button id="parcelasBtn">Modo Parcelas</button>
-  </div>
-
-  <!-- CANVAS -->
-  <canvas id="canvas3d" style="width:100vw; height:100vh; display:block;"></canvas>
-
-  <!-- SCRIPT PRINCIPAL -->
-  <script src="script.js"></script>
-
-</body>
-</html>
+<div id="tooltip"></div>
